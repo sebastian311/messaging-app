@@ -19,6 +19,9 @@ export class AuthEffects {
         this.authService.login(action.user.username, action.user.password).pipe(
           map((response) => {
             if (response.token) {
+              // Save to Local Storage for client side validation
+              localStorage.setItem('token', response.token);
+              
               return AuthActions.loginSuccess({
                 user: action.user,
                 token: response.token,
