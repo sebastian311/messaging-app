@@ -6,7 +6,7 @@ import {
   on,
   State
 } from '@ngrx/store';
-import { AuthState, ChatState, UIState, UsersState } from '../models/State';
+import { AuthState, ChatState, UIState, UsersState } from '../../data-access/models/State';
 import { login, logout, register } from '../actions/auth-actions';
 
 // Configuration:
