@@ -1,4 +1,5 @@
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environment/environment';
@@ -14,7 +15,11 @@ interface AuthResponse {
 export class AuthenticationService {
   private apiUrl = `${environment.apiUrl}/api/auth`;
 
-  constructor(private http: HttpClient){}
+  constructor(private http: HttpClient, private router: Router){}
+
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem('token');
+  }
 
   register(username: string, password: string): Observable<AuthResponse> {
     return this.http.post(`${this.apiUrl}/register`, { username, password } )
@@ -22,5 +27,9 @@ export class AuthenticationService {
 
   login(username: string, password: string): Observable<AuthResponse> {
     return this.http.post(`${this.apiUrl}/login`, { username, password } )
+  }
+
+  logout() {
+    localStorage.removeItem('token');
   }
 }

@@ -1,1 +1,30 @@
-<p>auth works!</p>
+<!-- TODO: Split register and login functionality -->
+<div class="container">
+  <ng-container *ngIf="registerPage; else loginTemplate">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <h2>Register</h2>
+      <input type="text" formControlName="username" placeholder="Username" />
+      <input
+        type="password"
+        formControlName="password"
+        placeholder="Password"
+      />
+      <button type="submit">Register</button>
+    </form>
+  </ng-container>
+
+  <ng-template #loginTemplate>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <h2>Login</h2>
+      <input type="text" formControlName="username" placeholder="Username" />
+      <input
+        type="password"
+        formControlName="password"
+        placeholder="Password"
+      />
+      <button type="submit">Login</button>
+    </form>
+  </ng-template>
+
+  <button class="toggle" (click)="registerPage = !registerPage">{{ !registerPage ? 'Register new account' : 'Already have account? LOGIN' }}</button>
+</div>

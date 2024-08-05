@@ -7,8 +7,7 @@ import {
   State
 } from '@ngrx/store';
 import { AuthState, ChatState, UIState, UsersState } from '../../data-access/models/State';
-import { login, logout, register } from '../actions/auth-actions';
-
+import * as AuthActions from '../actions/auth-actions'
 // Configuration:
 
 export interface AppState {
@@ -45,22 +44,36 @@ const initialChatState: ChatState = {
 
 const authReducer = createReducer(
   initialAuthState,
-  on(login, (state, { user, token }) => ({
+  on(AuthActions.loginSuccess, (state, { user, token }) => ({
+    ...state,
+    user,
+    token,
+    isLogged: true,
+    error: null,
+  })),
+  on(AuthActions.registerSuccess, (state, { user, token }) => ({
     ...state,
     user,
     token,
     error: null,
   })),
-  on(register, (state, { user, token }) => ({
+  on(AuthActions.loginFail, (state, { errorMessage }) => ({
     ...state,
-    user,
-    token,
-    error: null,
+    error: errorMessage,
+    user: null,
+    token: null,
   })),
-  on(logout, (state) => ({
+  on(AuthActions.registerFail, (state, { errorMessage }) => ({
+    ...state,
+    error: errorMessage,
+    user: null,
+    token: null,
+  })),
+  on(AuthActions.logout, (state) => ({
     ...state,
     user: null,
     token: null,
+    isLogged: false,
     error: null,
   }))
 );

@@ -1,1 +1,5 @@
-<p>header works!</p>
+<div class="nav-bar" *ngIf="isLogged$ | async as isLogged">
+    <ng-container *ngIf="isLogged">
+        <button (click)="logout()">Logout</button>
+    </ng-container>
+</div>
