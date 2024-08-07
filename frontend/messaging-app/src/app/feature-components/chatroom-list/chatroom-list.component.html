@@ -1,1 +1,16 @@
-<p>chatroom-list works!</p>
+<div *ngIf="isLoading$ | async" class="loading">Loading chat rooms...</div>
+
+<ul *ngIf="!(isLoading$ | async)">
+  <li *ngFor="let room of chatRooms$ | async">
+    {{ room.name }}
+    <button (click)="deleteChatRoom(room.id)">Delete</button>
+    <button (click)="updateChatRoom(room.id, 'New Name')">Update</button>
+  </li>
+</ul>
+
+<div>
+  <input #newRoomName type="text" placeholder="New chat room name" />
+  <button (click)="createChatRoom(newRoomName.value); newRoomName.value = ''">
+    Add Chat Room
+  </button>
+</div>

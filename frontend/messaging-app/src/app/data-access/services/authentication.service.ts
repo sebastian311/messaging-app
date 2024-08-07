@@ -1,5 +1,4 @@
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environment/environment';
@@ -15,10 +14,11 @@ interface AuthResponse {
 export class AuthenticationService {
   private apiUrl = `${environment.apiUrl}/api/auth`;
 
-  constructor(private http: HttpClient, private router: Router){}
+  constructor(private http: HttpClient){}
 
-  isAuthenticated(): boolean {
-    return !!localStorage.getItem('token');
+  isAuthenticated(): boolean | undefined {
+    if (typeof window !== 'undefined' && window.localStorage) return !!localStorage?.getItem('token');
+    return;
   }
 
   register(username: string, password: string): Observable<AuthResponse> {
@@ -30,6 +30,7 @@ export class AuthenticationService {
   }
 
   logout() {
-    localStorage.removeItem('token');
+    if (typeof window !== 'undefined' && window.localStorage)
+    localStorage?.removeItem('token');
   }
 }

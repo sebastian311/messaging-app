@@ -7,7 +7,8 @@ import { Action, MetaReducer, provideStore } from '@ngrx/store';
 import { reducers, AppState } from './state-management/reducers';
 import { provideEffects } from '@ngrx/effects';
 import { AuthEffects } from './state-management/effects/auth.effects';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http';
+import { ChatEffects } from './state-management/effects/chat.effects';
 
 export const metaReducers: MetaReducer<AppState, Action>[] = isDevMode()
   ? []
@@ -19,6 +20,6 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     provideStore(reducers, { metaReducers }),
     provideEffects(AuthEffects),
-    provideHttpClient()
+    provideHttpClient(withFetch())
   ],
 };

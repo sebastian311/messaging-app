@@ -1,3 +1,4 @@
+import { ChatRoom, Message } from "./Chatroom";
 
 
 export interface AuthState {
@@ -16,8 +17,9 @@ export interface AuthState {
   }
   
   export interface ChatState {
+    isLoading: boolean | undefined;
     chatRooms: ChatRoom[];
-    selectedRoomId: string | null;
+    selectedRoomId: string | undefined;
     messages: Message[];
     error: string | null;
   }
@@ -26,17 +28,4 @@ export interface AuthState {
     id: string;
     username: string;
     online: boolean;
-  }
-  
-  export interface ChatRoom {
-    id: string;
-    name: string;
-    messages: Message[];
-  }
-  
-  export interface Message {
-    id: string;
-    userId: string;
-    text: string;
-    timestamp: Date;
   }

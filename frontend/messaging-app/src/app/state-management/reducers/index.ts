@@ -4,12 +4,18 @@ import {
   createReducer,
   MetaReducer,
   on,
-  State
+  State,
 } from '@ngrx/store';
-import { AuthState, ChatState, UIState, UsersState } from '../../data-access/models/State';
-import * as AuthActions from '../actions/auth-actions'
-// Configuration:
+import {
+  AuthState,
+  ChatState,
+  UIState,
+  UsersState,
+} from '../../data-access/models/State';
+import * as AuthActions from '../actions/auth-actions';
+import * as ChatActions from '../actions/chat-actions';
 
+// Configuration:
 export interface AppState {
   auth: AuthState;
   ui: UIState;
@@ -20,11 +26,11 @@ export interface AppState {
 const initialAuthState: AuthState = {
   user: null,
   isLogged: false,
-  isLoading: false
+  isLoading: false,
 };
 
 const initialUIState: UIState = {
-  isLoading: false
+  isLoading: false,
 };
 
 const initialUsersState: UsersState = {
@@ -35,9 +41,10 @@ const initialUsersState: UsersState = {
 
 const initialChatState: ChatState = {
   chatRooms: [],
-  selectedRoomId: null,
+  selectedRoomId: undefined,
   messages: [],
-  error: null
+  error: null,
+  isLoading: undefined
 };
 
 // Implementation of all REDUCERS:
@@ -79,25 +86,96 @@ const authReducer = createReducer(
 );
 
 const uiReducer = createReducer(
-  initialUIState
-  // UI actions here
+  initialUIState,
+  on(ChatActions.fetchChatRooms, (state) => ({
+    ...state,
+    isLoading: true,
+  })),
+  on(ChatActions.fetchChatRoomsSuccess, (state) => ({
+    ...state,
+    isLoading: false,
+  })),
+  on(ChatActions.fetchChatRoomsFailure, (state) => ({
+    ...state,
+    isLoading: false,
+  })),
+  on(ChatActions.createChatRoom, (state) => ({
+    ...state,
+    isLoading: true,
+  })),
+  on(ChatActions.createChatRoomSuccess, (state) => ({
+    ...state,
+    isLoading: false,
+  })),
+  on(ChatActions.createChatRoomFailure, (state) => ({
+    ...state,
+    isLoading: false,
+  }))
 );
 
 const usersReducer = createReducer(
   initialUsersState
-  // Users actions here
+  // Users actions here TBI
 );
 
 const chatReducer = createReducer(
-  initialChatState
-  // Chat actions here
+  initialChatState,
+  on(ChatActions.fetchChatRoomsSuccess, (state, { chatRooms }) => ({
+    ...state,
+    chatRooms,
+    error: null,
+  })),
+  on(ChatActions.fetchChatRoomsFailure, (state, { error }) => ({
+    ...state,
+    error,
+  })),
+  on(ChatActions.createChatRoomSuccess, (state, { chatRoom }) => ({
+    ...state,
+    chatRooms: [...state.chatRooms, chatRoom],
+    error: null,
+  })),
+  on(ChatActions.createChatRoomFailure, (state, { error }) => ({
+    ...state,
+    error,
+  })),
+  on(ChatActions.updateChatRoomSuccess, (state, { chatRoom }) => ({
+    ...state,
+    chatRooms: state.chatRooms.map((room) =>
+      room.id === chatRoom.id ? chatRoom : room
+    ),
+    error: null,
+  })),
+  on(ChatActions.updateChatRoomFailure, (state, { error }) => ({
+    ...state,
+    error,
+  })),
+  on(ChatActions.deleteChatRoomSuccess, (state, { id }) => ({
+    ...state,
+    chatRooms: state.chatRooms.filter((room) => room.id !== id),
+    error: null,
+  })),
+  on(ChatActions.deleteChatRoomFailure, (state, { error }) => ({
+    ...state,
+    error,
+  })),
+  on(ChatActions.receiveMessage, (state, { message }) => ({
+    ...state,
+    messages: [...state.messages, message],
+    error: null,
+  })),
+  on(ChatActions.chatError, (state, { error }) => ({
+    ...state,
+    error,
+  }))
 );
 
 export const reducers: ActionReducerMap<AppState> = {
-  auth: authReducer,  
-  ui: uiReducer,      
+  auth: authReducer,
+  ui: uiReducer,
   users: usersReducer,
-  chat: chatReducer   
+  chat: chatReducer,
 };
 
-export const metaReducers: MetaReducer<State<AppState>>[] = isDevMode() ? [] : [];
+export const metaReducers: MetaReducer<State<AppState>>[] = isDevMode()
+  ? []
+  : [];

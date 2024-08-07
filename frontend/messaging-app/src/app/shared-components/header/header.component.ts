@@ -16,10 +16,9 @@ import { logout } from '../../state-management/actions/auth-actions';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent{
-  isLogged$: Observable<boolean>;
+  isLogged$: Observable<boolean> = this.store.select(selectIsLogged);
 
   constructor(private store: Store<AppState>, private authService: AuthenticationService) {
-    this.isLogged$ = this.store.select(selectIsLogged);
     if(this.authService.isAuthenticated()) this.isLogged$ = of(true);
   }
   

@@ -6,6 +6,7 @@ const sequelize = require('./config/database');
 const User = require('./models/User');
 const { ChatRoom, Message } = require('./models/ChatRoom');
 const authRoutes = require('./routes/auth');
+const chatRoomRoutes = require('./routes/chatroom');
 const authMiddleware = require('./middleware/authMiddleware');
 
 const app = express();
@@ -33,6 +34,7 @@ server.listen(PORT, async () => {
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/chatrooms', chatRoomRoutes);
 
 io.on('connection', (socket) => {
   console.log('A user connected');

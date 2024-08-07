@@ -1,0 +1,21 @@
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  position: relative;
+}
+
+button {
+  margin-left: 10px;
+}
+
+.loading {
+  color: #666;
+  font-size: 16px;
+}
