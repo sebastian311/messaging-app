@@ -5,6 +5,7 @@ export interface AuthState {
     isLogged: boolean;
     user: User | null;
     isLoading: boolean;
+    error: string | null;
   }
   
   export interface UIState {

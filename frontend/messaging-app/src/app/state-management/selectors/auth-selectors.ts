@@ -8,3 +8,8 @@ export const selectIsLogged = createSelector(
   selectAuthState,
   (state: AuthState) => state.isLogged
 );
+
+export const selectAuthError = createSelector(
+  selectAuthState,
+  (state: AuthState) => state.error
+);
