@@ -16,9 +16,9 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient){}
 
-  isAuthenticated(): boolean | undefined {
+  isAuthenticated(): boolean {
     if (typeof window !== 'undefined' && window.localStorage) return !!localStorage?.getItem('token');
-    return;
+    return false;
   }
 
   register(username: string, password: string): Observable<AuthResponse> {

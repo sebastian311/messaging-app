@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
@@ -15,14 +15,18 @@ import { logout } from '../../state-management/actions/auth-actions';
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
-export class HeaderComponent{
+export class HeaderComponent implements OnInit{
   isLogged$: Observable<boolean> = this.store.select(selectIsLogged);
 
-  constructor(private store: Store<AppState>, private authService: AuthenticationService) {
+  constructor(private store: Store<AppState>, private authService: AuthenticationService) {}
+
+  ngOnInit(): void {
     if(this.authService.isAuthenticated()) this.isLogged$ = of(true);
   }
-  
+
   logout() {
     this.store.dispatch(logout());
+    // TODO: Refactor this logic. Was too lazy 
+    this.isLogged$ = of(false);
   }
 }
