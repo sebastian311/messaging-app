@@ -9,6 +9,11 @@ li {
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   position: relative;
+  cursor: pointer;
+}
+
+li:hover {
+  background-color: #f9f9f93e;
 }
 
 button {
@@ -18,4 +23,8 @@ button {
 .loading {
   color: #666;
   font-size: 16px;
+}
+
+.add-chatroom-container {
+  padding: 1rem;
 }

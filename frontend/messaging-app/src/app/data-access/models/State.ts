@@ -20,7 +20,7 @@ export interface AuthState {
   export interface ChatState {
     isLoading: boolean | undefined;
     chatRooms: ChatRoom[];
-    selectedRoomId: string | undefined;
+    selectedRoom: ChatRoom | undefined;
     messages: Message[];
     error: string | null;
   }

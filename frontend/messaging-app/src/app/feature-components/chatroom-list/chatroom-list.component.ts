@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -9,11 +10,12 @@ import {
 } from '../../state-management/selectors/chatroom-selectors';
 import { AppState } from '../../state-management/reducers';
 import * as ChatActions from '../../state-management/actions/chat-actions';
+import { loadChatRoom } from '../../state-management/actions/chat-actions';
 
 @Component({
   selector: 'app-chatroom-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './chatroom-list.component.html',
   styleUrl: './chatroom-list.component.scss',
 })
@@ -21,7 +23,7 @@ export class ChatroomListComponent {
   chatRooms$: Observable<ChatRoom[]>;
   isLoading$: Observable<boolean | undefined>;
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private router: Router) {
     this.chatRooms$ = this.store.pipe(select(selectChatRooms));
     this.isLoading$ = this.store.pipe(select(selectIsLoading));
   }
@@ -39,6 +41,14 @@ export class ChatroomListComponent {
   updateChatRoom(id: number | undefined, newName: string): void {
     if (id && newName) {
       this.store.dispatch(ChatActions.updateChatRoom({ id, name: newName }));
+    }
+  }
+  
+  navigateToRoom(room: ChatRoom): void {
+    if (room.id) {
+      this.store.dispatch(loadChatRoom({ id: room.id }));
+    } else {
+      alert("Error. Could not load chat room. Please try again!")
     }
   }
 

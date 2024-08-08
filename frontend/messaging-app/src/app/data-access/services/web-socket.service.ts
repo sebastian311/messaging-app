@@ -1,26 +1,37 @@
 import { Injectable } from '@angular/core';
+import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
-import { io } from 'socket.io-client';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WebSocketService {
-  private socket: any;
+  private webSocket: Socket;
 
   constructor() {
-    this.socket = io('http://localhost:5000');
-  }
-
-  listen(eventName: string): Observable<any> {
-    return new Observable((subscriber) => {
-      this.socket.on(eventName, (data: any) => {
-        subscriber.next(data);
-      });
+    this.webSocket = new Socket({
+      url: 'http://localhost:5000',
+      options: {},
     });
   }
 
-  emit(eventName: string, data: any): void {
-    this.socket.emit(eventName, data);
+  public listen(eventName: string): Observable<any> {
+    return this.webSocket.fromEvent(eventName);
+  }
+
+  connect() {
+    this.webSocket.connect();
+  }
+
+  joinRoom(roomName: string, username: string) {
+    this.webSocket.emit('joinRoom', { roomName, username });
+  }
+
+  sendMessage(roomName: string, user: string, text: string) {
+    this.webSocket.emit('sendMessage', { roomName, user, text });
+  }
+
+  disconnect() {
+    this.webSocket.disconnect();
   }
 }

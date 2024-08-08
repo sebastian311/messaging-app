@@ -1,5 +1,6 @@
-import { ApplicationConfig, isDevMode } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
@@ -14,12 +15,15 @@ export const metaReducers: MetaReducer<AppState, Action>[] = isDevMode()
   ? []
   : [];
 
+const socketConfig: SocketIoConfig = { url: 'http://localhost:5000', options: {} };  
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideClientHydration(),
     provideStore(reducers, { metaReducers }),
-    provideEffects(AuthEffects),
+    provideEffects([AuthEffects, ChatEffects]),
+    importProvidersFrom(SocketIoModule.forRoot(socketConfig)),
     provideHttpClient(withFetch())
   ],
 };

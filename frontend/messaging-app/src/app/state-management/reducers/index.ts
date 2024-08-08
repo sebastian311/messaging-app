@@ -42,7 +42,7 @@ const initialUsersState: UsersState = {
 
 const initialChatState: ChatState = {
   chatRooms: [],
-  selectedRoomId: undefined,
+  selectedRoom: undefined,
   messages: [],
   error: null,
   isLoading: undefined
@@ -116,7 +116,7 @@ const uiReducer = createReducer(
 
 const usersReducer = createReducer(
   initialUsersState
-  // Users actions here TBI
+  // Users actions here TBI (like, modify avatar etc)
 );
 
 const chatReducer = createReducer(
@@ -137,6 +137,16 @@ const chatReducer = createReducer(
   })),
   on(ChatActions.createChatRoomFailure, (state, { error }) => ({
     ...state,
+    error,
+  })),
+  on(ChatActions.loadChatRoomSuccess, (state, { chatRoom }) => ({
+    ...state,
+    selectedRoom: chatRoom,
+    error: null,
+  })),
+  on(ChatActions.loadChatRoomFailure, (state, { error }) => ({
+    ...state,
+    selectedRoom: undefined,
     error,
   })),
   on(ChatActions.updateChatRoomSuccess, (state, { chatRoom }) => ({

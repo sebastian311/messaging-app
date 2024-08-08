@@ -12,28 +12,31 @@ export const routes: Routes = [
     children: [
       {
         path: 'auth',
-        component: AuthComponent
+        component: AuthComponent,
       },
       {
         path: 'chatrooms',
-        component: ChatroomListComponent,
         canActivate: [authGuard],
         children: [
           {
+            path: '',
+            component: ChatroomListComponent,
+          },
+          {
             path: ':id',
-            component: ChatroomComponent
-          }
-        ]
+            component: ChatroomComponent,
+          },
+        ],
       },
       {
         path: '',
         redirectTo: 'chatrooms',
-        pathMatch: 'full'
-      }
-    ]
+        pathMatch: 'full',
+      },
+    ],
   },
   {
     path: '**',
-    redirectTo: ''
-  }
+    redirectTo: '',
+  },
 ];

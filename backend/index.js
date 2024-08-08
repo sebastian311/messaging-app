@@ -9,8 +9,8 @@ const authRoutes = require('./routes/auth');
 const chatRoomRoutes = require('./routes/chatroom');
 const authMiddleware = require('./middleware/authMiddleware');
 
-const app = express();
-const server = http.createServer(app);
+const app = require('express')();
+const server = app.listen();
 const io = socketIo(server, {
   cors: {
     origin: '*',

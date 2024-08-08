@@ -4,6 +4,8 @@ const { ChatRoom } = require('../models/ChatRoom');
 
 // Get all chat rooms
 router.get('/', async (req, res) => {
+    debugger
+
   try {
     const chatrooms = await ChatRoom.findAll();
     res.json(chatrooms);

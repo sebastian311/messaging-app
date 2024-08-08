@@ -22,7 +22,14 @@ export const sendMessage = createAction(
 // Action for receiving a message
 export const receiveMessage = createAction(
   '[Chat API] Receive Message',
-  props<{ message: { chatRoomId: string, user: string; text: string; timestamp?: string } }>()
+  props<{
+    message: {
+      chatRoomId: string;
+      user: string;
+      text: string;
+      timestamp?: string;
+    };
+  }>()
 );
 
 // Action for chat errors
@@ -39,6 +46,22 @@ export const fetchChatRoomsSuccess = createAction(
 );
 export const fetchChatRoomsFailure = createAction(
   '[Chat API] Fetch Chat Rooms Failure',
+  props<{ error: any }>()
+);
+
+// Action to load a specific chat room by ID
+export const loadChatRoom = createAction(
+  '[Chat API] Load Chat Room',
+  props<{ id: number }>()
+);
+
+export const loadChatRoomSuccess = createAction(
+  '[Chat API] Load Chat Room Success',
+  props<{ chatRoom: ChatRoom }>()
+);
+
+export const loadChatRoomFailure = createAction(
+  '[Chat API] Load Chat Room Failure',
   props<{ error: any }>()
 );
 
