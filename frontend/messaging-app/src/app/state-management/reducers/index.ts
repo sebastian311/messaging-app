@@ -139,11 +139,17 @@ const chatReducer = createReducer(
     ...state,
     error,
   })),
-  on(ChatActions.loadChatRoomSuccess, (state, { chatRoom }) => ({
-    ...state,
-    selectedRoom: chatRoom,
-    error: null,
-  })),
+  on(ChatActions.loadChatRoomSuccess, (state, { chatRoom }) => {
+    // Add your console log here
+    console.log('Loaded chat room:', chatRoom);
+
+    // Return the new state object
+    return {
+      ...state,
+      selectedRoom: chatRoom,
+      error: null,
+    };
+  }),
   on(ChatActions.loadChatRoomFailure, (state, { error }) => ({
     ...state,
     selectedRoom: undefined,
