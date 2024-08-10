@@ -3,14 +3,13 @@
     <button class="back-button" (click)="goBack()">Back</button>
     <h1> {{ chatroom.name }} </h1>
   </div>
-  <div class="chat-messages">
+  <div class="chat-messages" #chatContainer>
     <div
       *ngFor="let message of messages"
       [ngClass]="{ self: message.isSelf, other: !message.isSelf }"
       class="message"
     >
       <div class="message-info">
-        <pre> {{ message | json }}</pre>
         <span class="username">{{ message.username }}</span>
         <span class="timestamp">{{ message.timestamp }}</span>
         <span class="status">{{ message.status }}</span>

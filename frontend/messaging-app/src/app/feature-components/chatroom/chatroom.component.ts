@@ -1,15 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectCurrentRoom } from '../../state-management/selectors/chatroom-selectors';
 import { AppState } from '../../state-management/reducers';
 import {
-  combineLatest,
-  combineLatestWith,
   filter,
-  map,
   Observable,
   Subscription,
   take,
@@ -17,9 +14,14 @@ import {
 } from 'rxjs';
 import { ChatRoom } from '../../data-access/models/Chatroom';
 import { WebSocketService } from '../../data-access/services/web-socket.service';
-import { selectUser } from '../../state-management/selectors/auth-selectors';
-import { User } from '../../data-access/models/State';
-import { REHYDRATE_USER } from '../../state-management/actions/auth-actions';
+
+interface Message {
+  isSelf: boolean;
+  username: string;
+  timestamp: string;
+  status: string;
+  content: string;
+}
 
 @Component({
   selector: 'app-chatroom',
@@ -28,29 +30,16 @@ import { REHYDRATE_USER } from '../../state-management/actions/auth-actions';
   templateUrl: './chatroom.component.html',
   styleUrl: './chatroom.component.scss',
 })
-export class ChatroomComponent implements OnInit {
+export class ChatroomComponent implements OnInit, AfterViewChecked, OnDestroy {
+  @ViewChild('chatContainer') private chatContainer!: ElementRef;
+  
   chatroomData$ = new Observable<ChatRoom | undefined>();
   user = JSON.parse(localStorage.getItem('user') || '');
 
   routerSub!: Subscription;
   messageSubscription!: Subscription;
 
-  messages = [
-    {
-      isSelf: true,
-      username: 'You',
-      timestamp: '10:16 AM',
-      status: 'Online',
-      content: "I'm good, thanks! What about you?",
-    },
-    {
-      isSelf: false,
-      username: 'Alice',
-      timestamp: '10:15 AM',
-      status: 'Online',
-      content: 'Hello, how are you?',
-    },
-  ];
+  messages: Message[] = [];
 
   newMessage = '';
 
@@ -97,14 +86,28 @@ export class ChatroomComponent implements OnInit {
         if (message.user !== this.user.username) {
           this.messages.push({
             isSelf: false,
-            username: message.username,
+            username: message.user,
             timestamp: new Date(message.timestamp).toLocaleTimeString(),
             status: 'Unknown', // TODO: Get user status. Might need a BE refactor.
             content: message.text,
           });
+
+          this.scrollToBottom();
         }
 
       });
+  }
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom(): void {
+    try {
+      this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
+    } catch (err) {
+      console.error('Scroll to bottom error:', err);
+    }
   }
 
   goBack() {
@@ -131,6 +134,7 @@ export class ChatroomComponent implements OnInit {
         this.newMessage.trim()
       );
       this.newMessage = '';
+      this.scrollToBottom();
     }
   }
 
