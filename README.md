@@ -13,7 +13,7 @@ This repository contains the code for a full-stack chat application utilizing a 
 
 - **Backend**: Node.js, Express, Socket.IO
 - **Frontend**: Angular, ngx-socket-io, RxJS
-- **Database**: Uses MongoDB/PostgreSQL/MySQL (choose as per your implementation)
+- **Database**: SQLite
 - **Styling**: CSS/SCSS
 
 ## Getting Started
