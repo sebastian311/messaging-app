@@ -4,7 +4,7 @@ import { User } from '../../data-access/models/State';
 // Actions for logging in
 export const login = createAction(
   '[Login Component] Sign In',
-  props<{ username: string; password: string}>()
+  props<{ username: string; password: string }>()
 );
 
 export const loginSuccess = createAction(
@@ -20,7 +20,7 @@ export const loginFail = createAction(
 // Actions for registering
 export const register = createAction(
   '[Register Component] Sign Up',
-  props<{ username: string; password: string}>()
+  props<{ username: string; password: string }>()
 );
 
 export const registerSuccess = createAction(
@@ -31,6 +31,12 @@ export const registerSuccess = createAction(
 export const registerFail = createAction(
   '[Register Component] Sign Up Fail',
   props<{ errorMessage: string }>()
+);
+
+// Action for rehydrating state (of user)
+export const REHYDRATE_USER = createAction(
+  '[User] Rehydrate',
+  props<{ user: User }>()
 );
 
 // Action for logging out

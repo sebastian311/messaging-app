@@ -30,7 +30,11 @@ export class AuthenticationService {
   }
 
   logout() {
-    if (typeof window !== 'undefined' && window.localStorage)
-    localStorage?.removeItem('token');
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage?.removeItem('token');
+      localStorage?.removeItem('user');
+    } else {
+      alert("ERROR: Could not log out!")
+    }
   }
 }

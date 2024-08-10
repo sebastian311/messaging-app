@@ -24,11 +24,17 @@ export class WebSocketService {
   }
 
   joinRoom(roomName: string, username: string) {
-    this.webSocket.emit('joinRoom', { roomName, username });
+    console.log("User is joining room from client side with: ", roomName, ", ", username);
+    setTimeout(() => this.webSocket.emit('joinRoom', { roomName, username }), 100);
+    
   }
 
   sendMessage(roomName: string, user: string, text: string) {
     this.webSocket.emit('sendMessage', { roomName, user, text });
+  }
+
+  getMessages(): Observable<any> {
+    return this.webSocket.fromEvent('message');
   }
 
   disconnect() {

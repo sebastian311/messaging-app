@@ -27,7 +27,7 @@ const initialAuthState: AuthState = {
   user: null,
   isLogged: false,
   isLoading: false,
-  error: null
+  error: null,
 };
 
 const initialUIState: UIState = {
@@ -45,20 +45,18 @@ const initialChatState: ChatState = {
   selectedRoom: undefined,
   messages: [],
   error: null,
-  isLoading: undefined
+  isLoading: undefined,
 };
 
 // Implementation of all REDUCERS:
 
 const authReducer = createReducer(
   initialAuthState,
-  on(AuthActions.loginSuccess, (state, { user, token }) => ({
-    ...state,
-    user,
-    token,
-    isLogged: true,
-    error: null,
-  })),
+  on(AuthActions.loginSuccess, (state, { user, token }) => {
+    localStorage.setItem('user', JSON.stringify(user));
+
+    return { ...state, user, token, isLogged: true, error: null };
+  }),
   on(AuthActions.registerSuccess, (state, { user, token }) => ({
     ...state,
     user,
@@ -115,8 +113,16 @@ const uiReducer = createReducer(
 );
 
 const usersReducer = createReducer(
-  initialUsersState
-  // Users actions here TBI (like, modify avatar etc)
+  initialUsersState,
+  on(AuthActions.REHYDRATE_USER, (state, { user }) => {
+    const savedUser = localStorage.getItem('user');
+    console.log('###', savedUser);
+    return {
+      ...state,
+      user,
+      error: null,
+    };
+  })
 );
 
 const chatReducer = createReducer(
@@ -139,17 +145,11 @@ const chatReducer = createReducer(
     ...state,
     error,
   })),
-  on(ChatActions.loadChatRoomSuccess, (state, { chatRoom }) => {
-    // Add your console log here
-    console.log('Loaded chat room:', chatRoom);
-
-    // Return the new state object
-    return {
-      ...state,
-      selectedRoom: chatRoom,
-      error: null,
-    };
-  }),
+  on(ChatActions.loadChatRoomSuccess, (state, { chatRoom }) => ({
+    ...state,
+    selectedRoom: chatRoom,
+    error: null,
+  })),
   on(ChatActions.loadChatRoomFailure, (state, { error }) => ({
     ...state,
     selectedRoom: undefined,

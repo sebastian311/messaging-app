@@ -10,6 +10,7 @@
       class="message"
     >
       <div class="message-info">
+        <pre> {{ message | json }}</pre>
         <span class="username">{{ message.username }}</span>
         <span class="timestamp">{{ message.timestamp }}</span>
         <span class="status">{{ message.status }}</span>
@@ -24,7 +25,8 @@
       type="text"
       [(ngModel)]="newMessage"
       placeholder="Type your message..."
+      (keydown.enter)="sendMessage(chatroom)"
     />
-    <button (click)="sendMessage()">Send</button>
+    <button (click)="sendMessage(chatroom)">Send</button>
   </div>
 </div>

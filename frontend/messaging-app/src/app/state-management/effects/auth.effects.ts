@@ -21,14 +21,16 @@ export class AuthEffects {
         this.authService.login(action.username, action.password).pipe(
           map((response) => {
             if (response.token) {
-              if (typeof window !== 'undefined' && window.localStorage) localStorage.setItem('token', response.token);
-              this.router.navigateByUrl("/chatrooms")
-              
+              if (typeof window !== 'undefined' && window.localStorage) {
+                localStorage.setItem('token', response.token);
+              }
+              this.router.navigateByUrl('/chatrooms');
+
               return AuthActions.loginSuccess({
                 user: {
                   username: action.username,
                   id: '',
-                  online: false
+                  online: false,
                 },
                 token: response.token,
               });
@@ -39,7 +41,11 @@ export class AuthEffects {
             }
           }),
           catchError((error) =>
-            of(AuthActions.loginFail({ errorMessage: error.message || 'Login Failed' }))
+            of(
+              AuthActions.loginFail({
+                errorMessage: error.message || 'Login Failed',
+              })
+            )
           )
         )
       )
@@ -57,7 +63,7 @@ export class AuthEffects {
                 user: {
                   username: action.username,
                   id: '',
-                  online: false
+                  online: false,
                 },
                 token: response.token,
               });
@@ -68,21 +74,26 @@ export class AuthEffects {
             }
           }),
           catchError((error) =>
-            of(AuthActions.registerFail({ errorMessage: error.message || 'Registration Failed' }))
+            of(
+              AuthActions.registerFail({
+                errorMessage: error.message || 'Registration Failed',
+              })
+            )
           )
         )
       )
     )
   );
 
-  logout$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(AuthActions.logout),
-      tap(() => {
-        this.authService.logout();
-        this.router.navigate(['/auth']);
-      })
-    ),
+  logout$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AuthActions.logout),
+        tap(() => {
+          this.authService.logout();
+          this.router.navigate(['/auth']);
+        })
+      ),
     { dispatch: false }
   );
 }
