@@ -87,7 +87,7 @@ export class ChatroomComponent implements OnInit, AfterViewChecked, OnDestroy {
           this.messages.push({
             isSelf: false,
             username: message.user,
-            timestamp: new Date(message.timestamp).toLocaleTimeString(),
+            timestamp: message.timestamp ? new Date(message.timestamp).toLocaleTimeString() : '',
             status: 'Unknown', // TODO: Get user status. Might need a BE refactor.
             content: message.text,
           });
@@ -104,6 +104,7 @@ export class ChatroomComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   scrollToBottom(): void {
     try {
+      if(this.chatContainer?.nativeElement)
       this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
     } catch (err) {
       console.error('Scroll to bottom error:', err);

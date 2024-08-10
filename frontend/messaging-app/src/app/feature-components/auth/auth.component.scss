@@ -1,16 +1,23 @@
 .container {
-  height: 100vh;
+  height: 95vh;
+  max-width: 100% !important;
+  margin: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  background-image: url('/assets/LoginBackground.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
   form {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 40%;
+    margin-bottom: 5%;
 
     input[type="text"],
     input[type="password"] {
@@ -32,6 +39,14 @@
     }
   }
   .toggle {
-      width: 30rem;
+    width: 10rem;
+    border: none;
+    font-weight: 900;
+    color: lightblue;
+    background-color: rgba(0, 0, 0, 0.6);;
+  }
+
+  .toggle:hover {
+    color: gray;
   }
 }
