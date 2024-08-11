@@ -65,6 +65,10 @@ Start the server:
 
 Register an account, log into said account, create a chatroom or join an existing one, then start chatting. For testing purposes, I advice using a separate browser to simulate the chat between two users.
 
+## Testing
+
+Run Jasmine testing via: `npm test`
+
 ## Authors
 
 - **Nae T Sebastian** - *Initial work(Still in progress)* - [www.github.com/sebastian311](https://www.github.com/sebastian311)
