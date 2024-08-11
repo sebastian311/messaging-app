@@ -1,17 +1,30 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientModule } from '@angular/common/http';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { HeaderComponent } from './header.component';
+import { AuthState, UIState, UsersState, ChatState } from '../../data-access/models/State';
+import { AppState } from '../../state-management/reducers';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
+  let store: MockStore;
+  
+  const initialState: AppState = {
+    auth: {} as AuthState,
+    ui: {} as UIState,
+    users: {} as UsersState,
+    chat: {} as ChatState
+  }
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HeaderComponent]
+      imports: [HeaderComponent, HttpClientModule],
+      providers: [provideMockStore({ initialState })]
     })
     .compileComponents();
     
+    store = TestBed.inject(MockStore);
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

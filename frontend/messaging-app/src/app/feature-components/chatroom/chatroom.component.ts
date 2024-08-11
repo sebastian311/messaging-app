@@ -1,17 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewChecked, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewChecked,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NavigationEnd, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectCurrentRoom } from '../../state-management/selectors/chatroom-selectors';
 import { AppState } from '../../state-management/reducers';
-import {
-  filter,
-  Observable,
-  Subscription,
-  take,
-  tap,
-} from 'rxjs';
+import { filter, Observable, Subscription, take, tap } from 'rxjs';
 import { ChatRoom } from '../../data-access/models/Chatroom';
 import { WebSocketService } from '../../data-access/services/web-socket.service';
 
@@ -32,7 +33,7 @@ interface Message {
 })
 export class ChatroomComponent implements OnInit, AfterViewChecked, OnDestroy {
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
-  
+
   chatroomData$ = new Observable<ChatRoom | undefined>();
   user = JSON.parse(localStorage.getItem('user') || '');
 
@@ -58,7 +59,7 @@ export class ChatroomComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.chatroomData$
       .pipe(
         take(1),
-        tap((chatroom) => {          
+        tap((chatroom) => {
           if (!chatroom || !this.user) {
             this.goBack(); // Redirect if data is missing
             return;
@@ -87,14 +88,15 @@ export class ChatroomComponent implements OnInit, AfterViewChecked, OnDestroy {
           this.messages.push({
             isSelf: false,
             username: message.user,
-            timestamp: message.timestamp ? new Date(message.timestamp).toLocaleTimeString() : '',
+            timestamp: message.timestamp
+              ? new Date(message.timestamp).toLocaleTimeString()
+              : '',
             status: 'Unknown', // TODO: Get user status. Might need a BE refactor.
             content: message.text,
           });
 
           this.scrollToBottom();
         }
-
       });
   }
 
@@ -104,8 +106,9 @@ export class ChatroomComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   scrollToBottom(): void {
     try {
-      if(this.chatContainer?.nativeElement)
-      this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
+      if (this.chatContainer?.nativeElement)
+        this.chatContainer.nativeElement.scrollTop =
+          this.chatContainer.nativeElement.scrollHeight;
     } catch (err) {
       console.error('Scroll to bottom error:', err);
     }
